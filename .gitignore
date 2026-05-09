@@ -1,0 +1,12 @@
+.DS_Store
+target/
+.m2/
+*.log
+.idea/
+.vscode/
+.env
+.env.*
+!.env.example
+.submission.env
+docker-data/
+*.iml

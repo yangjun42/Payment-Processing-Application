@@ -1,0 +1,50 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: payment-processing-application
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/payments}
+    username: ${SPRING_DATASOURCE_USERNAME:payments}
+    password: ${SPRING_DATASOURCE_PASSWORD:payments}
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+  flyway:
+    enabled: true
+  rabbitmq:
+    host: ${SPRING_RABBITMQ_HOST:localhost}
+    port: ${SPRING_RABBITMQ_PORT:5672}
+    username: ${SPRING_RABBITMQ_USERNAME:guest}
+    password: ${SPRING_RABBITMQ_PASSWORD:guest}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      probes:
+        enabled: true
+
+payment:
+  rabbit:
+    exchange: payments.exchange
+    queue: payments.processing
+    routing-key: payments.process
+  processing:
+    max-attempts: ${PAYMENT_MAX_ATTEMPTS:3}
+    initial-backoff: ${PAYMENT_INITIAL_BACKOFF:PT1S}
+    backoff-multiplier: ${PAYMENT_BACKOFF_MULTIPLIER:2.0}
+    max-backoff: ${PAYMENT_MAX_BACKOFF:PT30S}
+    stale-in-progress-after: ${PAYMENT_STALE_IN_PROGRESS_AFTER:PT30S}
+    payment-service-base-url: ${PAYMENT_SERVICE_BASE_URL:http://localhost:8081}
+  outbox:
+    publish-delay: PT1S
+  retry:
+    scan-delay: PT1S
+    recovery-delay: PT5S
+

@@ -1,0 +1,19 @@
+server:
+  port: ${SERVER_PORT:8081}
+
+spring:
+  application:
+    name: payment-simulator
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+      - org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration
+      - org.springframework.boot.autoconfigure.flyway.FlywayAutoConfiguration
+      - org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration
+
+payment:
+  simulator:
+    min-delay: ${PAYMENT_SIMULATOR_MIN_DELAY:10ms}
+    max-delay: ${PAYMENT_SIMULATOR_MAX_DELAY:2s}
+    technical-failure-rate: ${PAYMENT_SIMULATOR_TECHNICAL_FAILURE_RATE:0.0}
+    business-decline-rate: ${PAYMENT_SIMULATOR_BUSINESS_DECLINE_RATE:0.0}
